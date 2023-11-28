@@ -1,6 +1,6 @@
 const expressAsyncHandler = require("express-async-handler")
 
-const asyncHandler = require(expressAsyncHandler)
+const asyncHandler = require('express-async-handler')
 
 const getTareas = asyncHandler( async (req, res) => {
     res.status(200).json({message: "GET Obtener tareas"})
