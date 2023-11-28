@@ -1,9 +1,12 @@
-const expressAsyncHandler = require("express-async-handler")
+
 
 const asyncHandler = require('express-async-handler')
 
+const Tarea = require ('../model/tareasModel')
+
 const getTareas = asyncHandler( async (req, res) => {
-    res.status(200).json({message: "GET Obtener tareas"})
+    const tareas = await Tarea.find()
+    res.status(200).json(tareas)
 })
 
 const setTareas = asyncHandler(async (req, res) => {
@@ -12,7 +15,12 @@ const setTareas = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error("Dar una descripcion de texto")
     }
-    res.status(201).json({message: "POST Crear tareas"})
+
+    const tarea = await Tarea.create({
+        texto: req.body.texto,
+        email: req.body.email
+    })
+    res.status(201).json({ tarea })
 })
 
 const updateTareas = asyncHandler(async (req, res) => {
