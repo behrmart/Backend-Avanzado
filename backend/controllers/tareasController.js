@@ -1,19 +1,28 @@
-const getTareas = (req, res) => {
-    res.status(200).json({message: "Obtener tareas"})
-}
+const expressAsyncHandler = require("express-async-handler")
 
-const setTareas = (req, res) => {
-    res.status(201).json({message: "Crear tareas"})
-}
+const asyncHandler = require(expressAsyncHandler)
 
-const updateTareas = (req, res) => {
-    res.status(200).json({message: `Modificar la tarea ${req.params.id}`})
-}
+const getTareas = asyncHandler( async (req, res) => {
+    res.status(200).json({message: "GET Obtener tareas"})
+})
+
+const setTareas = asyncHandler(async (req, res) => {
+    console.log(req.body)
+    if (!req.body.texto){
+        res.status(400)
+        throw new Error("Dar una descripcion de texto")
+    }
+    res.status(201).json({message: "POST Crear tareas"})
+})
+
+const updateTareas = asyncHandler(async (req, res) => {
+    res.status(200).json({message: `PUT Modificar la tarea ${req.params.id}`})
+})
 
 
-const deleteTareas = (req, res) => {
-    res.status(204).json({message: `Borrar la tarea ${req.params.id}`})
-}
+const deleteTareas = asyncHandler(async (req, res) => {
+    res.status(204).json({message: `DEL Borrar la tarea ${req.params.id}`})
+})
 
 
 module.exports = {
