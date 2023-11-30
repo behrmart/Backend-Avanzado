@@ -24,12 +24,32 @@ const setTareas = asyncHandler(async (req, res) => {
 })
 
 const updateTareas = asyncHandler(async (req, res) => {
-    res.status(200).json({message: `PUT Modificar la tarea ${req.params.id}`})
+
+    const tarea = await Tarea.findById(req.params.id)
+    if (!tarea){
+        res.status(400)
+        throw new Error('La tarea no fue encontrada')
+    }
+
+    const tareaUpdated = await Tarea.findByIdAndUpdate(req.params.id, req.body, {new: true})
+
+    res.status(200).json(tareaUpdated)
 })
 
 
 const deleteTareas = asyncHandler(async (req, res) => {
-    res.status(204).json({message: `DEL Borrar la tarea ${req.params.id}`})
+    
+    const tarea = await Tarea.findById(req.params.id)
+    if (!tarea){
+        res.status(400)
+        throw new Error('La tarea no fue encontrada')
+    }
+
+    await Tarea.deleteOne(tarea) //Las dos son correctas
+
+    //await Tarea.findByIdAndDelete(req.params.id)
+
+    res.status(200).json({ id: req.params.id })
 })
 
 
