@@ -45,7 +45,7 @@ const deleteTareas = asyncHandler(async (req, res) => {
         throw new Error('La tarea no fue encontrada')
     }
 
-    await Tarea.deleteOne(tarea) //Las dos son correctas
+    await Tarea.deleteOne(tarea) //Las dos son correctas pero la otra busca dos veces
 
     //await Tarea.findByIdAndDelete(req.params.id)
 
