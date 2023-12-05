@@ -47,12 +47,36 @@ const registrarUser = asyncHandler( async (req, res) => {
 
 
 const loginUser = asyncHandler( async (req, res) => {
-    res.status(200).json({message: 'Usuario Logeado'})
+    //desestructurar al body
+    const {email,password} = req.body
+
+    //verificamos que exita el usuario
+    const user = await User.findOne({email})
+
+    //verificamos usuario y contraseña
+    if (user && (await bcrypt.compare(password, user.password))){
+        res.status(200).json({
+            _id: user.id, // representacion mongoose en modo string (en lugar de objeto ._id)
+            name: user.name,
+            email: user.email,
+            token: generarToken(user.id)})
+    } else {
+        res.status(400)
+        throw Error ('Credenciales incorrectas')
+    }
+
 })
 
 const misDatos = asyncHandler( async (req, res) => {
     res.status(200).json({message: 'mis datos'})
 })
+
+
+//Funcion para generar un JWT jason web token
+const generarToken = (id) => {
+    return jwt.sign({id}, process.env.JWT_SECRET, 
+        {expiresIn: '30d' })
+}
 
 module.exports = {
     registrarUser,
